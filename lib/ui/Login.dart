@@ -1,5 +1,8 @@
+import 'package:billstore/common/apifunctions/httpRequest.dart';
+import 'package:billstore/model/User.dart';
 import 'package:flutter/material.dart';
 import 'package:progress_dialog/progress_dialog.dart';
+import 'package:toast/toast.dart';
 
 import 'MainScreen.dart';
 import 'Signup.dart';
@@ -39,63 +42,27 @@ class LoginState extends State<Login>
 
   __submitMobileNumber()
   async {
-    progressDialog.show();
+    //progressDialog.show();
+    var httpRequest = HttpRequest();
+
+    String username = mobileNumberController.text;
+    String password = passwordController.text;
     print("Mobile number : ${mobileNumberController.text}" + " Password : ${passwordController.text}");
-//    Response response;
-    Navigator.push(context, MaterialPageRoute(builder: (context) => MainScreen()));
-//    Dio dio = new Dio();
 
-//    Map<String, String> body = {
-//      'username': mobileNumberController.text,
-//      'password': passwordController.text
-//    };
-//
-//    try {
-//      response = await dio.post("http://fun2tech.xyz:5000/login",data: body);
-//
-//      if(response.statusCode == 200)
-//      {
-//        print(response.data.toString());
-//        if(progressDialog.isShowing())
-//        {
-//          progressDialog.hide();
-//        }
-//        Navigator.push(context, MaterialPageRoute(builder: (context) => MainScreen()));
-//      }
-//      else
-//      {
-//        Toast.show("Some error occured. Please try again later", context);
-//      }
-//      //return UserResponse.fromJson(response.data);
-//    } catch (error, stacktrace) {
-//      if(progressDialog.isShowing())
-//      {
-//        progressDialog.hide();
-//      }
-//      print("Exception occured: $error stackTrace: $stacktrace");
-//      Toast.show("Some error occured. Please try again later", context);
-//      //Toast.show("Exception occured: $error stackTrace: $stacktrace", context);
-//      //return UserResponse.withError("$error");
-//    }
+    try
+    {
+      var result = await httpRequest.login(username, password);
+      User user = User.fromJson(result);
 
-    //response = await dio.post("http://fun2tech.xyz:5000/login",data: body);
+      print("Email " + user.email + "Address " + user.address);
 
-//    if(response.statusCode == 200)
-//    {
-//      print(response.data.toString());
-//      if(progressDialog.isShowing())
-//      {
-//        progressDialog.hide();
-//      }
-//      Navigator.push(context, MaterialPageRoute(builder: (context) => MainScreen()));
-//    }
-//    else
-//    {
-//      Toast.show("Some error occured. Please try again later", context);
-//    }
-
+      Navigator.push(context, MaterialPageRoute(builder: (context) => MainScreen()));
+    }
+    catch(e)
+    {
+      Toast.show("Some error occured. Please try again", context);
+    }
   }
-
 
   @override
   Widget build(BuildContext context)
