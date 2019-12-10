@@ -1,4 +1,5 @@
-import 'package:billstore/common/apifunctions/httpRequest.dart';
+import 'package:billstore/common/SessionManager.dart';
+import 'package:billstore/common/httpRequest.dart';
 import 'package:billstore/model/User.dart';
 import 'package:flutter/material.dart';
 import 'package:progress_dialog/progress_dialog.dart';
@@ -7,11 +8,11 @@ import 'package:toast/toast.dart';
 import 'MainScreen.dart';
 import 'Signup.dart';
 
-
 class Login extends StatefulWidget
 {
   @override
   State createState() => LoginState();
+
 }
 
 class LoginState extends State<Login>
@@ -53,9 +54,8 @@ class LoginState extends State<Login>
     {
       var result = await httpRequest.login(username, password);
       User user = User.fromJson(result);
-
       print("Email " + user.email + "Address " + user.address);
-
+      await saveUserDetails(user);
       Navigator.push(context, MaterialPageRoute(builder: (context) => MainScreen()));
     }
     catch(e)
