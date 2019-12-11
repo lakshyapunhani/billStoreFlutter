@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:billstore/model/User.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -12,6 +13,19 @@ class HttpRequest
     var response = await http.post(createUri('login/'),
         body: json.encode({'username': username, 'password': password}),headers: await getHeaders());
     if(response.statusCode == 200)
+    {
+      return json.decode(response.body);
+    }
+    return throw (response.statusCode.toString());
+  }
+
+  Future<Map> signUp(String companyName,String companyAddress
+      ,String companyGst,String username, String password) async{
+    var response = await http.post(createUri('user'),
+        body: json.encode({'username': username,
+          'password': password,'name':companyName,'address':companyAddress
+        ,'gstNumber':companyGst}),headers: await getHeaders());
+    if(response.statusCode == 201)
     {
       return json.decode(response.body);
     }
