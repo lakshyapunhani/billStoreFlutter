@@ -7,7 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class HttpRequest
 {
-  var url = "192.168.0.110";
+  var url = "192.168.0.118";
 
   Future<Map> login(String username,String password) async{
     var response = await http.post(createUri('login/'),
@@ -24,7 +24,8 @@ class HttpRequest
     var response = await http.post(createUri('user'),
         body: json.encode({'username': username,
           'password': password,'name':companyName,'address':companyAddress
-        ,'gstNumber':companyGst}),headers: await getHeaders());
+        ,'gstNumber':companyGst,'email':"lakshya@gmail.com"})
+        ,headers: await getHeaders());
     if(response.statusCode == 201)
     {
       return json.decode(response.body);
@@ -40,9 +41,7 @@ class HttpRequest
   }
 
   Future<Map<String, String>> getHeaders() async {
-//    SharedPreferences preferences = await SharedPreferences.getInstance();
     return {
-//      HttpHeaders.authorizationHeader: preferences.get('token'),
       HttpHeaders.contentTypeHeader: 'application/json'
     };
   }

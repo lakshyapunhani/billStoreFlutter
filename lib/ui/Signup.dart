@@ -15,7 +15,6 @@ class Signup extends StatefulWidget
 
 class SignupState extends State<Signup>
 {
-
   final TextEditingController companyNameController = new TextEditingController();
   final TextEditingController companyAddressController = new TextEditingController();
   final TextEditingController companyGstController = new TextEditingController();
