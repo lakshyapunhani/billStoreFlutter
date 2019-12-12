@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'FullScreenDialog.dart';
+import 'AddProductDialog.dart';
 
 class Products extends StatefulWidget
 {

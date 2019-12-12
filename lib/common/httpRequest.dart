@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:ffi';
 import 'dart:io';
 
 import 'package:billstore/model/User.dart';
@@ -11,7 +12,9 @@ class HttpRequest
 
   Future<Map> login(String username,String password) async{
     var response = await http.post(createUri('login/'),
-        body: json.encode({'username': username, 'password': password}),headers: await getHeaders());
+        body: json.encode
+          ({'username': username, 'password': password}),
+        headers: await getHeaders());
     if(response.statusCode == 200)
     {
       return json.decode(response.body);
@@ -31,6 +34,12 @@ class HttpRequest
       return json.decode(response.body);
     }
     return throw (response.statusCode.toString());
+  }
+
+  Future<Map> addProduct(String productName,String description,
+      double rate) async{
+    var response = await http.post(createUri('product'),
+    body: json.encode({'name':productName}),headers: await getHeaders());
   }
 
   String createUri(String path, {String id, Map params}) {

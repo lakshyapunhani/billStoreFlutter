@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:toast/toast.dart';
 
 enum DismissDialogAction {
   cancel,
@@ -14,14 +15,15 @@ class FullScreenDialogDemo extends StatefulWidget {
 }
 
 class FullScreenDialogDemoState extends State<FullScreenDialogDemo> {
-  bool _allDayValue = false;
   bool _saveNeeded = false;
-  bool _hasLocation = false;
+  bool _hasDescription = false;
   bool _hasName = false;
-  String _eventName;
+  String _productName;
+  String _productDescription;
+  String _productRate;
 
   Future<bool> _onWillPop() async {
-    _saveNeeded = _hasLocation || _hasName || _saveNeeded;
+    _saveNeeded = _hasDescription || _hasName || _saveNeeded;
     if (!_saveNeeded)
       return true;
 
@@ -33,7 +35,7 @@ class FullScreenDialogDemoState extends State<FullScreenDialogDemo> {
       builder: (BuildContext context) {
         return AlertDialog(
           content: Text(
-            'Discard new event?',
+            'Discard product?',
             style: dialogTextStyle,
           ),
           actions: <Widget>[
@@ -66,7 +68,8 @@ class FullScreenDialogDemoState extends State<FullScreenDialogDemo> {
           FlatButton(
             child: Text('SAVE', style: theme.textTheme.body1.copyWith(color: Colors.white)),
             onPressed: () {
-              Navigator.pop(context, DismissDialogAction.save);
+              Toast.show(_productName + _productDescription + _productRate, context);
+              //Navigator.pop(context, DismissDialogAction.save);
             },
           ),
         ],
@@ -82,15 +85,15 @@ class FullScreenDialogDemoState extends State<FullScreenDialogDemo> {
                 alignment: Alignment.bottomLeft,
                 child: TextField(
                   decoration: const InputDecoration(
-                    labelText: 'Event name',
+                    labelText: 'Product name',
                     filled: true,
                   ),
-                  style: theme.textTheme.headline,
+//                  style: theme.textTheme.headline,
                   onChanged: (String value) {
                     setState(() {
                       _hasName = value.isNotEmpty;
                       if (_hasName) {
-                        _eventName = value;
+                        _productName = value;
                       }
                     });
                   },
@@ -101,34 +104,32 @@ class FullScreenDialogDemoState extends State<FullScreenDialogDemo> {
                 alignment: Alignment.bottomLeft,
                 child: TextField(
                   decoration: const InputDecoration(
-                    labelText: 'Location',
-                    hintText: 'Where is the event?',
+                    labelText: 'Description',
+                    hintText: 'What is product like?',
                     filled: true,
                   ),
                   onChanged: (String value) {
                     setState(() {
-                      _hasLocation = value.isNotEmpty;
+                      _hasDescription = value.isNotEmpty;
+                      _productDescription = value;
                     });
                   },
                 ),
               ),
               Container(
-                decoration: BoxDecoration(
-                    border: Border(bottom: BorderSide(color: theme.dividerColor))
-                ),
-                child: Row(
-                  children: <Widget> [
-                    Checkbox(
-                      value: _allDayValue,
-                      onChanged: (bool value) {
-                        setState(() {
-                          _allDayValue = value;
-                          _saveNeeded = true;
-                        });
-                      },
-                    ),
-                    const Text('All-day'),
-                  ],
+                padding: const EdgeInsets.symmetric(vertical: 8.0),
+                alignment: Alignment.bottomLeft,
+                child: TextField(
+                  decoration: const InputDecoration(
+                    labelText: 'Rate',
+                    hintText: 'What is product rate?',
+                    filled: true,
+                  ),
+                  onChanged: (String value) {
+                    setState(() {
+                      _productRate = value;
+                    });
+                  },
                 ),
               ),
             ]
