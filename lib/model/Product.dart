@@ -1,7 +1,7 @@
 class Product
 {
   String name;
-  String id;
+  int id;
   double rate;
   String description;
   int quantity;

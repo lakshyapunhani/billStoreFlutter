@@ -25,3 +25,8 @@ Future<bool> isLoggedIn() async
   
   return _sharedPreferences.getBool(IS_LOGGED_IN);
 }
+
+Future<String> getUserId() async{
+  SharedPreferences _sharedPreferences = await SharedPreferences.getInstance();
+  return _sharedPreferences.getInt(USER_ID).toString();
+}

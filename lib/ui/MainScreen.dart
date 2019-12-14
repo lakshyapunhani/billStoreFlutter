@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 
-import 'Products.dart';
+import 'ProductScreen.dart';
 
 class MainScreen extends StatefulWidget
 {
@@ -68,7 +68,7 @@ class MainScreenState extends State<MainScreen>
               children: <Widget>[
                 Container(height: 120,width: 160,child:
                 InkWell(onTap:()
-                {Navigator.push(context, MaterialPageRoute(builder: (context) => Products()));}, child:
+                {Navigator.push(context, MaterialPageRoute(builder: (context) => ProductScreen()));}, child:
                 Card(color: Colors.blue,shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(15.0),),
                     child:Center(child:

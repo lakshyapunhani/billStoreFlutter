@@ -1,20 +1,17 @@
 import 'dart:async';
 
+import 'package:billstore/common/httpRequest.dart';
 import 'package:flutter/material.dart';
 import 'package:toast/toast.dart';
 
-enum DismissDialogAction {
-  cancel,
-  discard,
-  save,
-}
 
-class FullScreenDialogDemo extends StatefulWidget {
+
+class AddProductDialog extends StatefulWidget {
   @override
-  FullScreenDialogDemoState createState() => FullScreenDialogDemoState();
+  AddProductDialogState createState() => AddProductDialogState();
 }
 
-class FullScreenDialogDemoState extends State<FullScreenDialogDemo> {
+class AddProductDialogState extends State<AddProductDialog> {
   bool _saveNeeded = false;
   bool _hasDescription = false;
   bool _hasName = false;
@@ -66,10 +63,19 @@ class FullScreenDialogDemoState extends State<FullScreenDialogDemo> {
         title: Text('Add Product'),
         actions: <Widget> [
           FlatButton(
-            child: Text('SAVE', style: theme.textTheme.body1.copyWith(color: Colors.white)),
-            onPressed: () {
-              Toast.show(_productName + _productDescription + _productRate, context);
-              //Navigator.pop(context, DismissDialogAction.save);
+            child: Text('SAVE', style:
+            theme.textTheme.body1.copyWith(color: Colors.white)),
+            onPressed: () async {
+              var httpRequest = HttpRequest();
+              try
+              {
+                await httpRequest.addProduct(_productName, _productDescription, _productRate);
+                Navigator.pop(context);
+              }
+              catch(e)
+              {
+                Toast.show("Something went wrong.", context);
+              }
             },
           ),
         ],

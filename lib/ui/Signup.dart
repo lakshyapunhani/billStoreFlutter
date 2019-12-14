@@ -32,12 +32,12 @@ class SignupState extends State<Signup>
       return;
     }
 
-    var map = Map<String,dynamic>();
-    map['name'] = companyNameController.text;
-    map['address'] = companyAddressController.text;
-    map['gstNumber'] = companyGstController.text;
-    map['username'] = userNameController.text;
-    map['password'] = passwordController.text;
+//    var map = Map<String,dynamic>();
+//    map['name'] = companyNameController.text;
+//    map['address'] = companyAddressController.text;
+//    map['gstNumber'] = companyGstController.text;
+//    map['username'] = userNameController.text;
+//    map['password'] = passwordController.text;
 
     Toast.show("Company Name " + companyNameController.text, context);
 
