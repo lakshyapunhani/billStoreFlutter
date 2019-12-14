@@ -1,3 +1,4 @@
+import 'package:billstore/ui/ContactScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 
@@ -84,7 +85,9 @@ class MainScreenState extends State<MainScreen>
                           Text("Products",
                               style: TextStyle(color: Colors.white))]))),)),
                 Container(height: 120,width: 160,child:
-                Card(color: Colors.blue,semanticContainer: true,shape: RoundedRectangleBorder(
+                InkWell(onTap:()
+                {Navigator.push(context, MaterialPageRoute(builder: (context) => ContactScreen()));}, child:
+                Card(color: Colors.blue,shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(15.0),),
                     child:Center(child:
                     Column(
@@ -97,8 +100,7 @@ class MainScreenState extends State<MainScreen>
                               alignment: AlignmentDirectional.center),
                           Padding(padding: EdgeInsets.all(5.0),),
                           Text("Clients",
-                              style: TextStyle(color: Colors.white))
-                        ]))))
+                              style: TextStyle(color: Colors.white))]))),))
               ],),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,

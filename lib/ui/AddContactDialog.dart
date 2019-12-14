@@ -4,21 +4,23 @@ import 'package:billstore/common/httpRequest.dart';
 import 'package:flutter/material.dart';
 import 'package:toast/toast.dart';
 
-class AddProductDialog extends StatefulWidget {
+class AddContactDialog extends StatefulWidget {
   @override
-  AddProductDialogState createState() => AddProductDialogState();
+  AddContactDialogState createState() => AddContactDialogState();
 }
 
-class AddProductDialogState extends State<AddProductDialog> {
+class AddContactDialogState extends State<AddContactDialog> {
   bool _saveNeeded = false;
-  bool _hasDescription = false;
+  bool _hasUsername = false;
   bool _hasName = false;
-  String _productName;
-  String _productDescription;
-  String _productRate;
+  String _contactName;
+  String _contactAddress;
+  String _contactEmail;
+  String _contactUsername;
+  String _contactGstNumber;
 
   Future<bool> _onWillPop() async {
-    _saveNeeded = _hasDescription || _hasName || _saveNeeded;
+    _saveNeeded = _hasUsername || _hasName || _saveNeeded;
     if (!_saveNeeded)
       return true;
 
@@ -58,7 +60,7 @@ class AddProductDialogState extends State<AddProductDialog> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Add Product'),
+        title: Text('Add Client'),
         actions: <Widget> [
           FlatButton(
             child: Text('SAVE', style:
@@ -67,7 +69,8 @@ class AddProductDialogState extends State<AddProductDialog> {
               var httpRequest = HttpRequest();
               try
               {
-                await httpRequest.addProduct(_productName, _productDescription, _productRate);
+                Toast.show(_contactUsername, context);
+                //await httpRequest.addProduct(_contactName, _contactAddress, _contactEmail);
                 Navigator.pop(context);
               }
               catch(e)
@@ -89,7 +92,7 @@ class AddProductDialogState extends State<AddProductDialog> {
                 alignment: Alignment.bottomLeft,
                 child: TextField(
                   decoration: const InputDecoration(
-                    labelText: 'Product name',
+                    labelText: 'Name',
                     filled: true,
                   ),
 //                  style: theme.textTheme.headline,
@@ -97,7 +100,7 @@ class AddProductDialogState extends State<AddProductDialog> {
                     setState(() {
                       _hasName = value.isNotEmpty;
                       if (_hasName) {
-                        _productName = value;
+                        _contactName = value;
                       }
                     });
                   },
@@ -108,14 +111,13 @@ class AddProductDialogState extends State<AddProductDialog> {
                 alignment: Alignment.bottomLeft,
                 child: TextField(
                   decoration: const InputDecoration(
-                    labelText: 'Description',
-                    hintText: 'What is product like?',
+                    labelText: 'Address',
+                    hintText: 'What is contact address?',
                     filled: true,
                   ),
                   onChanged: (String value) {
                     setState(() {
-                      _hasDescription = value.isNotEmpty;
-                      _productDescription = value;
+                      _contactAddress = value;
                     });
                   },
                 ),
@@ -125,13 +127,46 @@ class AddProductDialogState extends State<AddProductDialog> {
                 alignment: Alignment.bottomLeft,
                 child: TextField(
                   decoration: const InputDecoration(
-                    labelText: 'Rate',
-                    hintText: 'What is product rate?',
+                    labelText: 'Mobile number',
+                    hintText: 'What is contact mobile number?',
                     filled: true,
                   ),
                   onChanged: (String value) {
                     setState(() {
-                      _productRate = value;
+                      _hasUsername = value.isNotEmpty;
+                      _contactUsername = value;
+                    });
+                  },
+                ),
+              ),
+              Container(
+                padding: const EdgeInsets.symmetric(vertical: 8.0),
+                alignment: Alignment.bottomLeft,
+                child: TextField(
+                  decoration: const InputDecoration(
+                    labelText: 'Email Id',
+                    hintText: 'What is contact email id?',
+                    filled: true,
+                  ),
+                  onChanged: (String value) {
+                    setState(() {
+                      _contactEmail = value;
+                    });
+                  },
+                ),
+              ),
+              Container(
+                padding: const EdgeInsets.symmetric(vertical: 8.0),
+                alignment: Alignment.bottomLeft,
+                child: TextField(
+                  decoration: const InputDecoration(
+                    labelText: 'GST Number',
+                    hintText: 'What is contact gst number?',
+                    filled: true,
+                  ),
+                  onChanged: (String value) {
+                    setState(() {
+                      _contactGstNumber = value;
                     });
                   },
                 ),
