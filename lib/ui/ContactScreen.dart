@@ -1,7 +1,8 @@
 import 'package:billstore/common/httpRequest.dart';
-import 'package:billstore/model/Product.dart';
+import 'package:billstore/model/Contact.dart';
 import 'package:billstore/ui/AddContactDialog.dart';
 import 'package:flutter/material.dart';
+import 'package:toast/toast.dart';
 
 class ContactScreen extends StatefulWidget
 {
@@ -11,24 +12,25 @@ class ContactScreen extends StatefulWidget
 
 class ContactState extends State<ContactScreen>
 {
-  List<Product> _products = <Product>[];
+  List<Contact> _contacts = <Contact>[];
 
   @override
   void initState(){
-    getProducts();
+    getContacts();
   }
 
-  getProducts() async{
+  getContacts() async{
     try{
       var httpRequest = HttpRequest();
-      var response = await httpRequest.getAllProducts();
+      var response = await httpRequest.getAllClients();
 
-      _products.clear();
+      _contacts.clear();
       for (var i = 0; i < response.length; i++) {
-        this._products.add(Product.fromJson(response[i]));
+        this._contacts.add(Contact.fromJson(response[i]));
       }
     }
     catch(e) {
+      Toast.show("No Contacts exist", context);
     }
 
     setState(() {
@@ -43,7 +45,11 @@ class ContactState extends State<ContactScreen>
       body:
       ListView.builder(
         itemBuilder: (context, position) {
-          return Column(
+          return InkWell(onTap: () async {
+            var result = await Navigator.push(context,
+                MaterialPageRoute(builder: (context) => AddContactDialog(contact: _contacts[position])));
+            getContacts();
+          }, child: Column(
             children: <Widget>[
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -55,7 +61,7 @@ class ContactState extends State<ContactScreen>
                         padding:
                         const EdgeInsets.fromLTRB(12.0, 12.0, 12.0, 6.0),
                         child: Text(
-                          _products[position].name,
+                          _contacts[position].name,
                           style: TextStyle(
                               fontSize: 22.0, fontWeight: FontWeight.bold),
                         ),
@@ -64,23 +70,11 @@ class ContactState extends State<ContactScreen>
                         padding:
                         const EdgeInsets.fromLTRB(12.0, 6.0, 12.0, 12.0),
                         child: Text(
-                          _products[position].description,
+                          _contacts[position].address,
                           style: TextStyle(fontSize: 18.0),
                         ),
                       ),
                     ],
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: <Widget>[
-                        Text(
-                          "INR " +_products[position].rate.toString(),
-                          style: TextStyle(color: Colors.black),
-                        ),
-                      ],
-                    ),
                   ),
                 ],
               ),
@@ -89,16 +83,16 @@ class ContactState extends State<ContactScreen>
                 color: Colors.grey,
               )
             ],
-          );
+          ));
         },
-        itemCount: _products.length,
+        itemCount: _contacts.length,
       ),
       floatingActionButton:
       FloatingActionButton(onPressed: () async
       {
         var result = await Navigator.push(context,
             MaterialPageRoute(builder: (context) => AddContactDialog()));
-        getProducts();
+        getContacts();
       },
         child: new IconTheme(
           data: new IconThemeData(

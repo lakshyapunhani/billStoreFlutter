@@ -1,10 +1,16 @@
 import 'dart:async';
 
 import 'package:billstore/common/httpRequest.dart';
+import 'package:billstore/model/Contact.dart';
 import 'package:flutter/material.dart';
 import 'package:toast/toast.dart';
 
 class AddContactDialog extends StatefulWidget {
+
+  final Contact contact;
+
+  AddContactDialog({Key key, this.contact}) : super(key:key);
+
   @override
   AddContactDialogState createState() => AddContactDialogState();
 }
@@ -18,6 +24,8 @@ class AddContactDialogState extends State<AddContactDialog> {
   String _contactEmail;
   String _contactUsername;
   String _contactGstNumber;
+
+  TextEditingController contactNameEditingController = TextEditingController();
 
   Future<bool> _onWillPop() async {
     _saveNeeded = _hasUsername || _hasName || _saveNeeded;
@@ -57,10 +65,15 @@ class AddContactDialogState extends State<AddContactDialog> {
   @override
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
-
+    var appBarTitle = "Add Client";
+    if(widget.contact != null)
+    {
+      appBarTitle = "Edit Client";
+      contactNameEditingController.text = widget.contact.name;
+    }
     return Scaffold(
       appBar: AppBar(
-        title: Text('Add Client'),
+        title: Text(appBarTitle),
         actions: <Widget> [
           FlatButton(
             child: Text('SAVE', style:
@@ -70,7 +83,8 @@ class AddContactDialogState extends State<AddContactDialog> {
               try
               {
                 Toast.show(_contactUsername, context);
-                //await httpRequest.addProduct(_contactName, _contactAddress, _contactEmail);
+                await httpRequest.addClient(_contactName,_contactUsername,
+                    _contactAddress,_contactEmail,_contactGstNumber);
                 Navigator.pop(context);
               }
               catch(e)
@@ -91,6 +105,7 @@ class AddContactDialogState extends State<AddContactDialog> {
                 padding: const EdgeInsets.symmetric(vertical: 8.0),
                 alignment: Alignment.bottomLeft,
                 child: TextField(
+                  controller: contactNameEditingController,
                   decoration: const InputDecoration(
                     labelText: 'Name',
                     filled: true,

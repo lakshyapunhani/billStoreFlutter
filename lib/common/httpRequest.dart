@@ -63,6 +63,35 @@ class HttpRequest
     return throw (response.statusCode.toString());
   }
 
+  Future<String> addClient(String name,String username,
+      String address,String email,String gstNumber) async{
+    var userId = await getUserId();
+    var response = await http.post(createUri
+      ('contact/',id: userId),
+        body: json.encode({'name':name,
+          'username':username,
+          'address':address,
+          'email':email,'gstNumber':gstNumber}),
+        headers: await getHeaders());
+    if(response.statusCode == 201)
+    {
+      return response.body;
+    }
+    return throw (response.statusCode.toString());
+  }
+
+  Future<List> getAllClients() async{
+    var userId = await getUserId();
+    var response = await http.get(createUri('contact/',
+        id: userId),
+        headers: await getHeaders());
+    if(response.statusCode == 200)
+    {
+      return json.decode(response.body);
+    }
+    return throw (response.statusCode.toString());
+  }
+
   String createUri(String path, {String id, Map params}) {
     if (id != null) {
       path += id;
