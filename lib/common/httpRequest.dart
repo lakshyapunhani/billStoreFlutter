@@ -80,6 +80,16 @@ class HttpRequest
     return throw (response.statusCode.toString());
   }
 
+  Future<String> deleteProduct(String id) async{
+    var response = await http.delete(createUri('product/',
+        id: id),headers: await getHeaders());
+    if(response.statusCode == 200)
+    {
+      return response.body;
+    }
+    return throw (response.statusCode.toString());
+  }
+
   Future<String> addClient(String name,String username,
       String address,String email,String gstNumber) async{
     var userId = await getUserId();
@@ -118,6 +128,16 @@ class HttpRequest
           'address':address,
           'email':email,'gstNumber':gstNumber}),
         headers: await getHeaders());
+    if(response.statusCode == 200)
+    {
+      return response.body;
+    }
+    return throw (response.statusCode.toString());
+  }
+
+  Future<String> deleteContact(String id) async{
+    var response = await http.delete(createUri('contact/',
+        id: id),headers: await getHeaders());
     if(response.statusCode == 200)
     {
       return response.body;

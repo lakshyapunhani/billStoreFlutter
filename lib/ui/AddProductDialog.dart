@@ -5,6 +5,8 @@ import 'package:billstore/model/Product.dart';
 import 'package:flutter/material.dart';
 import 'package:toast/toast.dart';
 
+enum PopupMenuItems { delete }
+
 class AddProductDialog extends StatefulWidget {
 
   final Product product;
@@ -30,11 +32,14 @@ class AddProductDialogState extends State<AddProductDialog> {
   var productRateEditingController = TextEditingController();
 
   var appBarTitle = "Add Product";
+  bool _isVisible = false;
+
 
   @override
   void initState() {
     if(widget.product != null)
     {
+      _isVisible = true;
       appBarTitle = "Edit Product";
       id = widget.product.id;
       productNameEditingController.text = widget.product.name;
@@ -125,6 +130,30 @@ class AddProductDialogState extends State<AddProductDialog> {
               }
             },
           ),
+          Visibility(
+            visible: _isVisible,
+              child:
+          PopupMenuButton<PopupMenuItems> (
+            onSelected: (PopupMenuItems result) async {
+              var httpRequest = HttpRequest();
+              try
+              {
+                  await httpRequest.deleteProduct(id.toString());
+                  Navigator.pop(context);
+              }
+              catch(e)
+              {
+                  Toast.show("Some error occured. Please try again later", context);
+              }
+              setState(() {
+              }); },
+            itemBuilder: (BuildContext context) => <PopupMenuEntry<PopupMenuItems>>[
+              const PopupMenuItem<PopupMenuItems>(
+                value: PopupMenuItems.delete,
+                child: Text('Delete'),
+              ),
+            ],
+          ))
         ],
       ),
       body: Form(

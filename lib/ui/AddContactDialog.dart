@@ -5,6 +5,8 @@ import 'package:billstore/model/Contact.dart';
 import 'package:flutter/material.dart';
 import 'package:toast/toast.dart';
 
+enum PopupMenuItems { delete }
+
 class AddContactDialog extends StatefulWidget {
 
   final Contact contact;
@@ -34,12 +36,14 @@ class AddContactDialogState extends State<AddContactDialog> {
   TextEditingController contactGstNumberEditingController = TextEditingController();
 
   var appBarTitle = "Add Client";
+  bool _isVisible = false;
 
 
   @override
   void initState() {
     if(widget.contact != null)
     {
+      _isVisible = true;
       appBarTitle = "Edit Client";
       id = widget.contact.id;
       contactNameEditingController.text = widget.contact.name;
@@ -131,6 +135,30 @@ class AddContactDialogState extends State<AddContactDialog> {
               }
             },
           ),
+          Visibility(
+              visible: _isVisible,
+              child:
+              PopupMenuButton<PopupMenuItems> (
+                onSelected: (PopupMenuItems result) async {
+                  var httpRequest = HttpRequest();
+                  try
+                  {
+                    await httpRequest.deleteContact(id.toString());
+                    Navigator.pop(context);
+                  }
+                  catch(e)
+                  {
+                    Toast.show("Some error occured. Please try again later", context);
+                  }
+                  setState(() {
+                  }); },
+                itemBuilder: (BuildContext context) => <PopupMenuEntry<PopupMenuItems>>[
+                  const PopupMenuItem<PopupMenuItems>(
+                    value: PopupMenuItems.delete,
+                    child: Text('Delete'),
+                  ),
+                ],
+              ))
         ],
       ),
       body: Form(
