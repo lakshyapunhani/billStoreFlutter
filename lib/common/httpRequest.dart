@@ -6,7 +6,7 @@ import 'package:http/http.dart' as http;
 
 class HttpRequest
 {
-  var url = "192.168.0.110";
+  var url = "192.168.1.5";
 
   Future<Map> login(String username,String password) async{
     var response = await http.post(createUri('login/'),
@@ -63,6 +63,23 @@ class HttpRequest
     return throw (response.statusCode.toString());
   }
 
+  Future<String> updateProduct(String id,String productName,
+      String description, String rate) async{
+    var response = await http.put(createUri
+      ('product/',id: id),
+        body: json.encode(
+            {'name':productName,
+              'rate':double.parse(rate),
+              'description':description,
+              'quantity':0}),
+        headers: await getHeaders());
+    if(response.statusCode == 200)
+    {
+      return response.body;
+    }
+    return throw (response.statusCode.toString());
+  }
+
   Future<String> addClient(String name,String username,
       String address,String email,String gstNumber) async{
     var userId = await getUserId();
@@ -88,6 +105,22 @@ class HttpRequest
     if(response.statusCode == 200)
     {
       return json.decode(response.body);
+    }
+    return throw (response.statusCode.toString());
+  }
+
+  Future<String> updateClient(String id,String name,String username,
+      String address,String email,String gstNumber) async{
+    var response = await http.put(createUri
+      ('contact/',id: id),
+        body: json.encode({'name':name,
+          'username':username,
+          'address':address,
+          'email':email,'gstNumber':gstNumber}),
+        headers: await getHeaders());
+    if(response.statusCode == 200)
+    {
+      return response.body;
     }
     return throw (response.statusCode.toString());
   }

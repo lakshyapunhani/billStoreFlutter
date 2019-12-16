@@ -1,10 +1,16 @@
 import 'dart:async';
 
 import 'package:billstore/common/httpRequest.dart';
+import 'package:billstore/model/Product.dart';
 import 'package:flutter/material.dart';
 import 'package:toast/toast.dart';
 
 class AddProductDialog extends StatefulWidget {
+
+  final Product product;
+
+  AddProductDialog({Key key, this.product}) : super(key:key);
+
   @override
   AddProductDialogState createState() => AddProductDialogState();
 }
@@ -17,13 +23,37 @@ class AddProductDialogState extends State<AddProductDialog> {
   String _productDescription;
   String _productRate;
 
+  int id = 0;
+
+  var productNameEditingController = TextEditingController();
+  var productDescriptionEditingController = TextEditingController();
+  var productRateEditingController = TextEditingController();
+
+  var appBarTitle = "Add Product";
+
+  @override
+  void initState() {
+    if(widget.product != null)
+    {
+      appBarTitle = "Edit Product";
+      id = widget.product.id;
+      productNameEditingController.text = widget.product.name;
+      productDescriptionEditingController.text = widget.product.description;
+      productRateEditingController.text = widget.product.rate.toString();
+      _productName = widget.product.name;
+      _productRate = widget.product.rate.toString();
+      _productDescription = widget.product.description;
+    }
+  }
+
   Future<bool> _onWillPop() async {
     _saveNeeded = _hasDescription || _hasName || _saveNeeded;
     if (!_saveNeeded)
       return true;
 
     final ThemeData theme = Theme.of(context);
-    final TextStyle dialogTextStyle = theme.textTheme.subhead.copyWith(color: theme.textTheme.caption.color);
+    final TextStyle dialogTextStyle = theme.textTheme.subhead
+        .copyWith(color: theme.textTheme.caption.color);
 
     return await showDialog<bool>(
       context: context,
@@ -58,21 +88,40 @@ class AddProductDialogState extends State<AddProductDialog> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Add Product'),
+        title: Text(appBarTitle),
         actions: <Widget> [
           FlatButton(
             child: Text('SAVE', style:
             theme.textTheme.body1.copyWith(color: Colors.white)),
             onPressed: () async {
               var httpRequest = HttpRequest();
-              try
+              if(id == 0)
               {
-                await httpRequest.addProduct(_productName, _productDescription, _productRate);
-                Navigator.pop(context);
+                try
+                {
+                  await httpRequest.addProduct(_productName,
+                      _productDescription,
+                      _productRate);
+                  Navigator.pop(context);
+                }
+                catch(e)
+                {
+                  Toast.show("Something went wrong.", context);
+                }
               }
-              catch(e)
+              else
               {
-                Toast.show("Something went wrong.", context);
+                try
+                {
+                  await httpRequest.updateProduct(id.toString()
+                      ,_productName, _productDescription,
+                      _productRate);
+                  Navigator.pop(context);
+                }
+                catch(e)
+                {
+                  Toast.show("Something went wrong.", context);
+                }
               }
             },
           ),
@@ -88,6 +137,7 @@ class AddProductDialogState extends State<AddProductDialog> {
                 padding: const EdgeInsets.symmetric(vertical: 8.0),
                 alignment: Alignment.bottomLeft,
                 child: TextField(
+                  controller: productNameEditingController,
                   decoration: const InputDecoration(
                     labelText: 'Product name',
                     filled: true,
@@ -107,6 +157,7 @@ class AddProductDialogState extends State<AddProductDialog> {
                 padding: const EdgeInsets.symmetric(vertical: 8.0),
                 alignment: Alignment.bottomLeft,
                 child: TextField(
+                  controller: productDescriptionEditingController,
                   decoration: const InputDecoration(
                     labelText: 'Description',
                     hintText: 'What is product like?',
@@ -124,6 +175,7 @@ class AddProductDialogState extends State<AddProductDialog> {
                 padding: const EdgeInsets.symmetric(vertical: 8.0),
                 alignment: Alignment.bottomLeft,
                 child: TextField(
+                  controller: productRateEditingController,
                   decoration: const InputDecoration(
                     labelText: 'Rate',
                     hintText: 'What is product rate?',

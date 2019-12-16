@@ -25,7 +25,35 @@ class AddContactDialogState extends State<AddContactDialog> {
   String _contactUsername;
   String _contactGstNumber;
 
+  int id = 0;
+
   TextEditingController contactNameEditingController = TextEditingController();
+  TextEditingController contactAddressEditingController = TextEditingController();
+  TextEditingController contactEmailEditingController = TextEditingController();
+  TextEditingController contactUsernameEditingController = TextEditingController();
+  TextEditingController contactGstNumberEditingController = TextEditingController();
+
+  var appBarTitle = "Add Client";
+
+
+  @override
+  void initState() {
+    if(widget.contact != null)
+    {
+      appBarTitle = "Edit Client";
+      id = widget.contact.id;
+      contactNameEditingController.text = widget.contact.name;
+      contactAddressEditingController.text = widget.contact.address;
+      contactUsernameEditingController.text = widget.contact.username;
+      contactEmailEditingController.text = widget.contact.email;
+      contactGstNumberEditingController.text = widget.contact.gstNumber;
+      _contactName = widget.contact.name;
+      _contactAddress = widget.contact.address;
+      _contactEmail = widget.contact.email;
+      _contactUsername = widget.contact.username;
+      _contactGstNumber = widget.contact.gstNumber;
+    }
+  }
 
   Future<bool> _onWillPop() async {
     _saveNeeded = _hasUsername || _hasName || _saveNeeded;
@@ -65,12 +93,6 @@ class AddContactDialogState extends State<AddContactDialog> {
   @override
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
-    var appBarTitle = "Add Client";
-    if(widget.contact != null)
-    {
-      appBarTitle = "Edit Client";
-      contactNameEditingController.text = widget.contact.name;
-    }
     return Scaffold(
       appBar: AppBar(
         title: Text(appBarTitle),
@@ -80,16 +102,32 @@ class AddContactDialogState extends State<AddContactDialog> {
             theme.textTheme.body1.copyWith(color: Colors.white)),
             onPressed: () async {
               var httpRequest = HttpRequest();
-              try
+
+              if(id == 0)
               {
-                Toast.show(_contactUsername, context);
-                await httpRequest.addClient(_contactName,_contactUsername,
-                    _contactAddress,_contactEmail,_contactGstNumber);
-                Navigator.pop(context);
+                try
+                {
+                  await httpRequest.addClient(_contactName,_contactUsername,
+                      _contactAddress,_contactEmail,_contactGstNumber);
+                  Navigator.pop(context);
+                }
+                catch(e)
+                {
+                  Toast.show("Something went wrong.", context);
+                }
               }
-              catch(e)
+              else
               {
-                Toast.show("Something went wrong.", context);
+                try
+                {
+                  await httpRequest.updateClient(id.toString(),_contactName,_contactUsername,
+                      _contactAddress,_contactEmail,_contactGstNumber);
+                  Navigator.pop(context);
+                }
+                catch(e)
+                {
+                  Toast.show("Something went wrong.", context);
+                }
               }
             },
           ),
@@ -125,6 +163,7 @@ class AddContactDialogState extends State<AddContactDialog> {
                 padding: const EdgeInsets.symmetric(vertical: 8.0),
                 alignment: Alignment.bottomLeft,
                 child: TextField(
+                  controller: contactAddressEditingController,
                   decoration: const InputDecoration(
                     labelText: 'Address',
                     hintText: 'What is contact address?',
@@ -141,6 +180,7 @@ class AddContactDialogState extends State<AddContactDialog> {
                 padding: const EdgeInsets.symmetric(vertical: 8.0),
                 alignment: Alignment.bottomLeft,
                 child: TextField(
+                  controller: contactUsernameEditingController,
                   decoration: const InputDecoration(
                     labelText: 'Mobile number',
                     hintText: 'What is contact mobile number?',
@@ -158,6 +198,7 @@ class AddContactDialogState extends State<AddContactDialog> {
                 padding: const EdgeInsets.symmetric(vertical: 8.0),
                 alignment: Alignment.bottomLeft,
                 child: TextField(
+                  controller: contactEmailEditingController,
                   decoration: const InputDecoration(
                     labelText: 'Email Id',
                     hintText: 'What is contact email id?',
@@ -174,6 +215,7 @@ class AddContactDialogState extends State<AddContactDialog> {
                 padding: const EdgeInsets.symmetric(vertical: 8.0),
                 alignment: Alignment.bottomLeft,
                 child: TextField(
+                  controller: contactGstNumberEditingController,
                   decoration: const InputDecoration(
                     labelText: 'GST Number',
                     hintText: 'What is contact gst number?',

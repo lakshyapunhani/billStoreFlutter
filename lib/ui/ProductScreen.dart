@@ -43,7 +43,11 @@ class ProductState extends State<ProductScreen>
       body:
     ListView.builder(
       itemBuilder: (context, position) {
-        return Column(
+        return InkWell(onTap: () async {
+          var result = await Navigator.push(context,
+              MaterialPageRoute(builder: (context) => AddProductDialog(product: _products[position],)));
+          getProducts();
+        }, child: Column(
           children: <Widget>[
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -89,7 +93,7 @@ class ProductState extends State<ProductScreen>
               color: Colors.grey,
             )
           ],
-        );
+        ));
       },
       itemCount: _products.length,
     ),
