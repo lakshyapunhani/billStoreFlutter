@@ -61,50 +61,46 @@ class MainScreenState extends State<MainScreen>
 
         return new Padding(
           padding: padding,
-          child: new InkWell(
-            onTap: () {
-              print('Card selected');
-            },
-            child: new Container(
-              decoration: new BoxDecoration(
-                borderRadius: new BorderRadius.circular(10.0),
-                color: Color(0x80f3f7ff),
-                boxShadow: [
-                  new BoxShadow(
-                      color: Colors.black.withAlpha(70),
-                      offset: const Offset(3.0, 10.0),
-                      blurRadius: 15.0)
-                ],
-                image: new DecorationImage(
-                  image: AssetImage("assets/images/box.png"),
-                ),
-              ),
-              width: 300.0,
-              child: new Stack(
-                children: <Widget>[
-                  new Align(
-                    alignment: Alignment.bottomCenter,
-                    child: new Container(
-                        decoration: new BoxDecoration(
-                            color: const Color(0xFF273A48),
-                            borderRadius: new BorderRadius.only(
-                                bottomLeft: new Radius.circular(10.0),
-                                bottomRight: new Radius.circular(10.0))),
-                        height: 30.0,
-                        child: new Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            new Text(
-                              '${items[index%items.length]}',
-                              style: new TextStyle(color: Colors.white),
-                            )
-                          ],
-                        )),
-                  )
-                ],
+          child:  Container(
+            decoration: new BoxDecoration(
+              borderRadius: new BorderRadius.circular(10.0),
+              color: Color(0x80f3f7ff),
+              boxShadow: [
+                new BoxShadow(
+                    color: Colors.black.withAlpha(70),
+                    offset: const Offset(3.0, 10.0),
+                    blurRadius: 15.0)
+              ],
+              image: new DecorationImage(
+                image: AssetImage("assets/images/box.png"),
               ),
             ),
+            width: 300.0,
+            child: new Stack(
+              children: <Widget>[
+                new Align(
+                  alignment: Alignment.bottomCenter,
+                  child: new Container(
+                      decoration: new BoxDecoration(
+                          color: const Color(0xFF273A48),
+                          borderRadius: new BorderRadius.only(
+                              bottomLeft: new Radius.circular(10.0),
+                              bottomRight: new Radius.circular(10.0))),
+                      height: 30.0,
+                      child: new Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          new Text(
+                            '${items[index%items.length]}',
+                            style: new TextStyle(color: Colors.white),
+                          )
+                        ],
+                      )),
+                )
+              ],
+            ),
           ),
+
         );
       },
       scrollDirection: Axis.horizontal,
@@ -125,8 +121,8 @@ class MainScreenState extends State<MainScreen>
               Padding(
                 padding: const EdgeInsets.fromLTRB(18.0,0,0,0),
                 child: Text("Bill Store",style:
-                  TextStyle(color: Colors.white,fontSize: 40,
-                      fontWeight: FontWeight.w600)),
+                TextStyle(color: Colors.white,fontSize: 40,
+                    fontWeight: FontWeight.w600)),
               ),
               Container(
                 margin: EdgeInsets.fromLTRB(0, 0, 20, 0),
@@ -135,7 +131,7 @@ class MainScreenState extends State<MainScreen>
                 child: Icon(Icons.notifications_none, size: 20,),
                 decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: Colors.white),
+                    color: Color(0x80f3f7ff)),
               ),
             ],)),
 
@@ -143,21 +139,14 @@ class MainScreenState extends State<MainScreen>
           height: 300.0, width: _width, child: headerList)),
 
       Expanded(flex: 5,
-//          child:Card(
-//              color: Colors.white,
-//              margin: EdgeInsets.all(15.0),
-//              shape: RoundedRectangleBorder(
-//                  borderRadius: BorderRadius.circular(35.0)),
-//              elevation: 5.0,
-              child: GridView.count(
-                  crossAxisCount: 2,
-                  childAspectRatio: 3/2,
-                  padding: const EdgeInsets.all(14.0),
-                  mainAxisSpacing: 4.0,
-                  crossAxisSpacing: 4.0,
-                  children: _getTiles()
-              ))//)
-
+          child: GridView.count(
+              crossAxisCount: 2,
+              childAspectRatio: 3/2,
+              padding: const EdgeInsets.all(14.0),
+              mainAxisSpacing: 4.0,
+              crossAxisSpacing: 4.0,
+              children: _getTiles()
+          ))
     ],)
     )));}
 
