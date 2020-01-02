@@ -6,7 +6,7 @@ import 'package:http/http.dart' as http;
 
 class HttpRequest
 {
-  var url = "192.168.1.5";
+  var url = "192.168.0.112";
 
   Future<Map> login(String username,String password) async{
     var response = await http.post(createUri('login/'),
