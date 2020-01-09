@@ -150,7 +150,11 @@ packages:
       name: shared_preferences_platform_interface
       url: "https://pub.dartlang.org"
     source: hosted
+<<<<<<< Updated upstream
     version: "1.0.1"
+=======
+    version: "1.0.0"
+>>>>>>> Stashed changes
   sky_engine:
     dependency: transitive
     description: flutter
