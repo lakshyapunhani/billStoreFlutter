@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:toast/toast.dart';
 
+import 'EstimateScreen.dart';
 import 'ProductScreen.dart';
 import 'ContactScreen.dart';
 
@@ -21,9 +22,16 @@ class MainScreenState extends State<MainScreen>
   {
     switch(index)
     {
+      case 1:
+        {
+          Navigator.push(context, MaterialPageRoute(builder: (context) =>
+              EstimateScreen()));
+          break;
+        }
       case 2:
         {
-          Navigator.push(context, MaterialPageRoute(builder: (context) => ContactScreen()));
+          Navigator.push(context, MaterialPageRoute(builder: (context)
+          => ContactScreen()));
           break;
         }
       case 3:
@@ -56,7 +64,8 @@ class MainScreenState extends State<MainScreen>
       itemBuilder: (context, index) {
 
         EdgeInsets padding = index == 0?const EdgeInsets.only(
-            left: 20.0, right: 10.0, top: 4.0, bottom: 30.0):const EdgeInsets.only(
+            left: 20.0, right: 10.0, top: 4.0, bottom: 30.0):
+        const EdgeInsets.only(
             left: 10.0, right: 10.0, top: 4.0, bottom: 30.0);
 
         return new Padding(

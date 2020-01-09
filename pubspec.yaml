@@ -28,6 +28,7 @@ dependencies:
   progress_dialog: ^1.1.0+1
   shared_preferences: 0.5.4+8
   http: 0.12.0+2
+  autocomplete_textfield: ^1.7.3
 
 dev_dependencies:
   flutter_test:
