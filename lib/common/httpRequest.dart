@@ -6,7 +6,7 @@ import 'package:http/http.dart' as http;
 
 class HttpRequest
 {
-  var url = "192.168.0.108";
+  var url = "192.168.0.111";
 
   Future<Map> login(String username,String password) async{
     var response = await http.post(createUri('login/'),
@@ -107,10 +107,10 @@ class HttpRequest
     return throw (response.statusCode.toString());
   }
 
-  Future<List> getAllClients() async{
+  Future<List> getAllClients(Map params) async{
     var userId = await getUserId();
     var response = await http.get(createUri('contact/',
-        id: userId),
+        id: userId,params: params),
         headers: await getHeaders());
     if(response.statusCode == 200)
     {
